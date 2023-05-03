@@ -47,7 +47,7 @@ def plotdirvariances(S):
   #surf = ax.plot_surface(V[0,:], V[1,:], V[2,:] , antialiased=False, color=(0.9,0.9,0.0,0.2))
 
   surf = ax.plot_surface(scaledv[0,:,:], scaledv[1,:,:], scaledv[2,:,:],
-                       antialiased=False, color=(0.9,0.9,0.0,0.2))
+                       antialiased=False, color=(0.2,0.9,0.0,0.2))
 
   plt.show()
   
