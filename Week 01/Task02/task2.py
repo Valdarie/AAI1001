@@ -36,11 +36,11 @@ def plotdirvariances(S):
       thisv = V[:, i, j]
 
       # TODO need to compute v^T S v
-      scaledv = np.zeros_like(V)
       stv = np.dot(thisv.T, S)
-      scaledv[:, i, j] = np.dot(stv, thisv)
+      #TODO multiply it to it
+      scaledv[:, i, j] = np.dot(stv, thisv) *thisv
 
-      scaledv[:,i,j]= stv * V[:,i,j] #TODO multiply it to it
+      #scaledv[:,i,j]= stv * V[:,i,j] 
       
       
   fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
@@ -51,8 +51,6 @@ def plotdirvariances(S):
 
   plt.show()
   
-
-
 if __name__=='__main__':
   S = createacovariance()
   plotdirvariances(S)
