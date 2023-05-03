@@ -36,3 +36,10 @@ def plotellipse():
 
 if __name__=='__main__':
     plotellipse()
+
+
+'''
+In this updated code, the createacovariance() function generates a random symmetric matrix S and computes its eigendecomposition. It then scales the eigenvalues of the matrix to obtain a covariance matrix cov. The plotellipse() function uses the covariance matrix to generate num_points points on the surface of a sphere, and then scales the points using the Cholesky decomposition of the covariance matrix to obtain the ellipse. Finally, it plots the scaled points on a 3D plot using the plot_surface() function from matplotlib.
+
+To test the code, you can simply call plotellipse() from the main function. The resulting plot should show a 3D ellipse with its principal axes aligned with the eigenvectors of the covariance matrix.
+'''
