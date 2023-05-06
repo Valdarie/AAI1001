@@ -4,7 +4,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-folder = r'C:\Users\Xuanting\Desktop\data'
+folder = r'C:\Users\Xuanting\Desktop\data'  # Remember to change to your file paths for the "data" folder (paths cannot have spacings)
 num_exp = 2
 num_lr = 5
 num_reps = 10
