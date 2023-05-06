@@ -1,3 +1,4 @@
+# Sub-task 1
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -23,6 +24,7 @@ def mixture_pdf(x, a, s):
     return f1(x, a, s) + f2(x, a, s)
 
 
+# Sub-task 2
 # Mean of mixture model
 def mixture_mean():
     mean1 = -a * 0.5    # Mean of 1st component of mixture model
@@ -31,6 +33,7 @@ def mixture_mean():
 
 print("Mean Of Mixture Model:", mixture_mean())
 
+# Sub-task 3
 # Variance of mixture model
 def mixture_variance():
     var1 = ((-a - mixture_mean())**2 * f1(0, a, s)) + ((a - mixture_mean())**2 * f2(0, a, s)) # Variance of 1st and 2nd component of mixture model
