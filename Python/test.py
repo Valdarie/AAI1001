@@ -54,7 +54,7 @@ if ptbxl_input:
     st.write("## Filtered ptbxl data")
     st.write(selected_df)
 
-if ptbxl_id:
+if ptbxl_id and not ptbxl_input:
     ptbxl_id = ptbxl_id.strip() # Remove any leading / trailing spaces from user input
     
     # Display the unique patient IDs before removing commas
