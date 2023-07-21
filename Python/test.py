@@ -43,6 +43,7 @@ if scp_input:
 # Display Ptbxl Database
 st.header('Ptbxl Database')
 ptbxl_input = st.text_input("Enter the column name for filtering: ")
+ptbxl_id = st.text_input("Or search by Patient ID: ")
 
 if not ptbxl_input and not ptbxl_id: #If no user input, show full data
     st.write(ptbxl_data)
@@ -52,8 +53,6 @@ if ptbxl_input:
     # Display the filtered DataFrame
     st.write("## Filtered ptbxl data")
     st.write(selected_df)
-
-ptbxl_id = st.text_input("Or search by Patient ID: ")
 
 if ptbxl_id:
     ptbxl_id = ptbxl_id.strip() # Remove any leading / trailing spaces from user input
