@@ -1,13 +1,6 @@
 import streamlit as st
 import pandas as pd
 
-# st.set_page_config
-st.set_page_config(page_title="This is the Page Title", layout="wide")
-st.title("This is the Title")
-st.header("This is the header")
-st.write("Hello World from Streamlit using st.write")
-
-# Function to get data from CSV files and cache it
 @st.cache_data
 def get_data(x):
     return pd.read_csv(x)
@@ -23,8 +16,8 @@ def search_bar(df, col_name, ele):
         return df  # Returning the original DataFrame if the column doesn't exist
 
 # Load data from CSV Files
-scp_data = get_data('.\Jupyter\scp_statements.csv')
-ptbxl_data = get_data('.\Jupyter\ptbxl_database.csv')
+scp_data = get_data('..\Jupyter\scp_statements.csv')
+ptbxl_data = get_data('..\Jupyter\ptbxl_database.csv')
 
 # Display SCP Statements
 st.header('SCP Statements')
