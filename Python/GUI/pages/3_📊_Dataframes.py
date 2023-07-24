@@ -1,6 +1,14 @@
 import streamlit as st
 import pandas as pd
 
+# st.set_page_config
+st.set_page_config(page_title="AAI1001 | Dataframes", layout="wide", page_icon="📊")
+
+st.title("This is the Title")
+st.header("This is the header")
+st.write("Hello World from Streamlit using st.write")
+
+# Function to get data from CSV files and cache it
 @st.cache_data
 def get_data(x):
     return pd.read_csv(x)

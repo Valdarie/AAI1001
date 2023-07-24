@@ -2,13 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # st.set_page_config
-st.set_page_config(page_title="This is the Page Title", layout="wide")
-def sidebar():
-    with st.sidebar:
-        st.sidebar.header("Header1")
-        st.success("TEST")
-
-sidebar()
+st.set_page_config(page_title="AAI1001", layout="wide", page_icon="💯")
 
 st.title("This is the Title")
 st.header("This is the header")
