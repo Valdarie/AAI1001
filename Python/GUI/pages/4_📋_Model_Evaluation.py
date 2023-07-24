@@ -10,7 +10,9 @@ st.set_page_config(page_title="AAI1001 | Results", layout="wide", page_icon="ğŸ“
 def sidebar():
     with st.sidebar:
         st.header('For Devs:')
-        st.write('')
+        container = st.container()
+        with container:
+            st.write('Performance Measurement and Evaluation')
 sidebar()
 
 st.header("Prediction Results")
