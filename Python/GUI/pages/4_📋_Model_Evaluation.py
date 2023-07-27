@@ -1,5 +1,3 @@
-#Pip install streamlit 
-#Pip installJupytext
 import streamlit as st
 import subprocess
 import pandas as pd
@@ -21,7 +19,7 @@ st.header("Prediction Results")
 def run_ecg_test_script():
     try:
         # Execute the ecg_test.py script without providing a specific cwd argument
-        process = subprocess.Popen(['python', 'ecg_test.py'])
+        process = subprocess.Popen(['python', '../ecg_test.py'])
         process.wait()  # Wait for the script to finish
         return "ECG test script executed successfully."
     except subprocess.CalledProcessError as e:
@@ -40,12 +38,12 @@ if prediction_results is not None:
     st.dataframe(report_df)
 
     # Assuming the confusion matrix plot is saved as confusion_matrix.jpg in the same directory as ecg_test.py
-    # You can display the image using Matplotlib and Streamlit's st.pyplot()
+    # You can display the image using Matplotlib and Streamlit's st.image()
     plt_img = plt.imread('../confusion_matrix.jpg')
     st.image(plt_img, caption="Confusion Matrix", use_column_width=True)
 
     # Assuming the normalized confusion matrix plot is saved as normalized_confusion_matrix.jpg
-    # You can display the image using Matplotlib and Streamlit's st.pyplot()
+    # You can display the image using Matplotlib and Streamlit's st.image()
     normalized_plt_img = plt.imread('../normalized_confusion_matrix.jpg')
     st.image(normalized_plt_img, caption="Normalized Confusion Matrix", use_column_width=True)
 
