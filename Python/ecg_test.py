@@ -126,22 +126,31 @@ def load_model(model_path):
 
 from keras.models import load_model
 
-def evaluate_model(model_path, test_images):
+def evaluate_model(model_path, image_path):
     # Load the pre-trained model
     best_model = load_model(model_path)
     
-    # Evaluate the model on the test images
-    results = best_model.evaluate(test_images, verbose=0)
+    # Preprocess the uploaded image
+    image = cv2.imread(image_path)
+    image = gray_torgb(image)
+    image = np.expand_dims(image, axis=0)
     
-    # Print the evaluation results
-    print('Test Loss     : {:.4f}'.format(results[0]))
-    print('Test Accuracy : {:.4f}%'.format(results[1] * 100))
-    print('Test Precision: {:.4f}%'.format(results[2] * 100))
-    print('Test Recall   : {:.4f}%'.format(results[3] * 100))
-    print('Test AUC      : {:.4f}'.format(results[4]))
-
-evaluate_model('ECG_Model.h5', test_images)
-
+    # Make predictions using the model
+    predictions = best_model.predict(image)
+    predicted_label = np.argmax(predictions, axis=1)[0]
+    
+    # Get the label names corresponding to the predicted and true labels
+    label_names = test_images.class_indices
+    label_names = dict((v, k) for k, v in label_names.items())
+    
+    # Get the predicted label name and true label name
+    predicted_label_name = label_names[predicted_label]
+    true_label_name = os.path.split(os.path.split(image_path)[0])[1]
+    
+    # Calculate evaluation metrics (accuracy, etc.)
+    accuracy = (predicted_label_name == true_label_name)
+    
+    return accuracy, predicted_label_name
 
 # ### 5. Predictions
 
