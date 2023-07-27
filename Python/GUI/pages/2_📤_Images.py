@@ -33,6 +33,6 @@ with container:
     for uploaded_file in uploaded_files:
         bytes_data = uploaded_file.read()
         if uploaded_file.type.startswith('image'):
-            show_file.image(uploaded_file, caption=f"Uploaded Image: {uploaded_file.name}", use_column_width=True)
-        else:
-            st.warning("Please upload an image file (PNG, JPEG).")
+            image = Image.open(BytesIO(bytes_data))
+            show_file.image(image, caption=f"Uploaded Image: {uploaded_file.name}", use_column_width=True)
+            
