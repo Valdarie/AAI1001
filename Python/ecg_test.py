@@ -42,13 +42,16 @@ dataframe_test['Label'].value_counts()
 # In[4]:
 
 
-samples = []
-for category in ['N','M','Q','V','S','F']:
-    category_slice = dataframe_test.query('Label == @category')
-    samples.append(category_slice.sample(160, random_state=1))
-
-dataframe_test = pd.concat(samples, axis=0).sample(frac=1.0, random_state=1).reset_index(drop=True)
-dataframe_test['Label'].value_counts()
+def balance_data(dataframe, target_size=160):
+    samples = []
+    for category in ['N', 'M', 'Q', 'V', 'S', 'F']:
+        category_slice = dataframe.query('Label == @category')
+        num_samples = min(target_size, len(category_slice))
+        if num_samples == 0:
+            continue  # Skip categories with no data points
+        samples.append(category_slice.sample(num_samples, random_state=1))
+    dataframe_balanced = pd.concat(samples, axis=0).sample(frac=1.0, random_state=1).reset_index(drop=True)
+    return dataframe_balanced
 
 
 # In[5]:

@@ -1,54 +1,30 @@
 import streamlit as st
-import subprocess
 import pandas as pd
 import matplotlib.pyplot as plt
+import itertools
+import sys
 
-st.set_page_config(page_title="AAI1001 | Results", layout="wide", page_icon="📋")
+# Import functions from ecg_test.py
+sys.path.append("../")  # Add the parent directory to the Python path
+from ecg_test import plot_confusion_matrix
 
-def sidebar():
-    with st.sidebar:
-        st.header('For Devs:')
-        container = st.container()
-        with container:
-            st.write('Performance Measurement and Evaluation')
-sidebar()
+# Your code for setting up the Streamlit app and other UI elements
+st.set_page_config(page_title="Model Evaluation Results", page_icon="📋")
 
-st.header("Prediction Results")
+st.header("Model Evaluation Results")
 
-# Function to run the ecg_test.py script and capture its output
-def run_ecg_test_script():
-    try:
-        # Execute the ecg_test.py script without providing a specific cwd argument
-        process = subprocess.Popen(['python', '../ecg_test.py'])
-        process.wait()  # Wait for the script to finish
-        return "ECG test script executed successfully."
-    except subprocess.CalledProcessError as e:
-        st.error(f"Error while running ecg_test.py: {e}")
-        return None
+# Assuming evaluation_results contains the uploaded file names, accuracy, and predicted label names
+if 'evaluation_results' in st.session_state:
+    st.write("Evaluation Results:")
+    for file_name, accuracy, predicted_label in st.session_state.evaluation_results:
+        st.write(f"File Name: {file_name}, Accuracy: {accuracy}, Predicted Label: {predicted_label}")
 
-# Call the run_ecg_test_script() function and capture the output
-prediction_results = run_ecg_test_script()
+        # Load the confusion matrix from the file generated in ecg_test.py
+        cm = pd.read_csv('confusion_matrix.csv', index_col=0)
 
-# Check if the prediction_results is not None (i.e., the script ran successfully)
-if prediction_results is not None:
-    # Assuming the prediction_results contain the classification report data in CSV format
-    # You can load it into a DataFrame and display it using Streamlit's st.dataframe()
-    report_df = pd.read_csv('../classification_report.csv', index_col=0)
-    st.write("Classification Report:")
-    st.dataframe(report_df)
+        # Call the plot_confusion_matrix function from ecg_test.py
+        # and pass the confusion matrix and class names to the function
+        cm_plot = plot_confusion_matrix(cm, classes=['F', 'M', 'N', 'Q', 'S', 'V'], normalize=False)
 
-    # Assuming the confusion matrix plot is saved as confusion_matrix.jpg in the same directory as ecg_test.py
-    # You can display the image using Matplotlib and Streamlit's st.image()
-    plt_img = plt.imread('../confusion_matrix.jpg')
-    st.image(plt_img, caption="Confusion Matrix", use_column_width=True)
-
-    # Assuming the normalized confusion matrix plot is saved as normalized_confusion_matrix.jpg
-    # You can display the image using Matplotlib and Streamlit's st.image()
-    normalized_plt_img = plt.imread('../normalized_confusion_matrix.jpg')
-    st.image(normalized_plt_img, caption="Normalized Confusion Matrix", use_column_width=True)
-
-    # Assuming prediction_results also contains any other output you want to display
-    # You can use Streamlit's st.write(), st.table(), etc., to display the additional results.
-
-else:
-    st.error("Unable to run the prediction script. Please check the logs for details.")
+        # Display the confusion matrix plot using Streamlit's st.pyplot()
+        st.pyplot(cm_plot)  # Display the confusion matrix plot in the Streamlit app
