@@ -72,6 +72,7 @@ def gray_torgb(image):
     return image
 
 
+
 # In[7]:
 
 
@@ -129,12 +130,11 @@ def load_model(model_path):
 
 from keras.models import load_model
 
-def evaluate_model(model_path, image_path):
+def evaluate_model(model_path, image):
     # Load the pre-trained model
     best_model = load_model(model_path)
     
     # Preprocess the uploaded image
-    image = cv2.imread(image_path)
     image = gray_torgb(image)
     image = np.expand_dims(image, axis=0)
     
@@ -142,18 +142,8 @@ def evaluate_model(model_path, image_path):
     predictions = best_model.predict(image)
     predicted_label = np.argmax(predictions, axis=1)[0]
     
-    # Get the label names corresponding to the predicted and true labels
-    label_names = test_images.class_indices
-    label_names = dict((v, k) for k, v in label_names.items())
-    
-    # Get the predicted label name and true label name
-    predicted_label_name = label_names[predicted_label]
-    true_label_name = os.path.split(os.path.split(image_path)[0])[1]
-    
-    # Calculate evaluation metrics (accuracy, etc.)
-    accuracy = (predicted_label_name == true_label_name)
-    
-    return accuracy, predicted_label_name
+    return predicted_label
+
 
 # ### 5. Predictions
 
@@ -240,7 +230,7 @@ def plot_confusion_matrix(cm, classes,
 
     plt.tight_layout()
     plt.rcParams['font.size'] = '20'
-    
+
 plot_confusion_matrix(cm, classes=['F', 'M', 'N', 'Q', 'S', 'V'],normalize=False,title='Confusion Matrix')
 plt.ylabel('True label')
 plt.xlabel('Predicted label')
@@ -252,39 +242,32 @@ plt.savefig('confusion_matrix' + '.jpg', dpi=500, bbox_inches='tight')
 
 import itertools
 
-def plot_confusion_matrix(cm, classes,
-                          normalize=False,
-                          title='Confusion Matrix',
-                          cmap=plt.cm.Oranges):
+def plot_norm_confusion_matrix(cm, classes,
+                                     title='Normalized Confusion Matrix',
+                                     cmap=plt.cm.Oranges):
     """
-    This function prints and plots the confusion matrix.
-    Normalization can be applied by setting `normalize=True`.
+    This function prints and plots the normalized confusion matrix.
     """
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-        print('Normalized Confusion Matrix')
-    else:
-        print('Confusion Matrix, without normalization')
-        
+    cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     plt.figure(figsize=(8, 6))
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.imshow(cm_normalized, interpolation='nearest', cmap=cmap)
     plt.title(title)
     tick_marks = np.arange(len(classes))
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
     plt.colorbar()
 
-    fmt = '.4f' if normalize else 'd'
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, format(cm[i, j], fmt),
+    fmt = '.4f'
+    thresh = cm_normalized.max() / 2.
+    for i, j in itertools.product(range(cm_normalized.shape[0]), range(cm_normalized.shape[1])):
+        plt.text(j, i, format(cm_normalized[i, j], fmt),
                  horizontalalignment='center',
-                 color='white' if cm[i, j] > thresh else 'black')
+                 color='white' if cm_normalized[i, j] > thresh else 'black')
 
     plt.tight_layout()
     plt.rcParams['font.size'] = '7'
     
-plot_confusion_matrix(cm, classes=['F', 'M', 'N', 'Q', 'S', 'V'],normalize=True,title='Normalized Confusion Matrix')
+plot_norm_confusion_matrix(cm, classes=['F', 'M', 'N', 'Q', 'S', 'V'],normalize=True,title='Normalized Confusion Matrix')
 plt.ylabel('True label')
 plt.xlabel('Predicted label')
 plt.savefig('normalized_confusion_matrix' + '.jpg', dpi=500, bbox_inches='tight')
