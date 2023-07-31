@@ -1,47 +1,67 @@
 import streamlit as st
-import pandas as pd
 import tensorflow as tf
+import numpy as np
 from PIL import Image
-import os
-from io import BytesIO, StringIO
 
-# Import functions from ecg_test.py
-import sys
-sys.path.append("../")  # Add the parent directory to the Python path
-from ecg_test import evaluate_model
+# st.set_page_config
+st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📤")
 
-# Your code for setting up the Streamlit app and other UI elements
-st.set_page_config(page_title="Upload ECG Images", page_icon="📤")
+def preprocess_image(image):
+    img = Image.open(image).convert('RGB')
+    img = img.resize((224, 224))
+    img_array = np.array(img)
+    img_array = img_array / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
 
-st.header("Upload ECG Images")
+def resize_image(image, size=(100, 100)):
+    img = Image.open(image).convert('RGB')
+    img = img.resize(size)
+    return img
 
-# Function to process the uploaded ECG image and run the model evaluation
-@st.cache
-def process_uploaded_file(uploaded_files):
-    evaluation_results = []
+# Streamlit app code
+def main():
+    st.header("Upload ECG")
 
-    for uploaded_file in uploaded_files:
-        bytes_data = uploaded_file.read()
-        if uploaded_file.type.startswith('image'):
-            image = Image.open(BytesIO(bytes_data))
-            st.image(image, caption=f"Uploaded Image: {uploaded_file.name}", use_column_width=True)
+    # Initialize session-specific state variables
+    if "predictions" not in st.session_state:
+        st.session_state.predictions = None
+    if "evaluation_completed" not in st.session_state:
+        st.session_state.evaluation_completed = False
 
-            # Run the model evaluation on the uploaded image
-            accuracy, predicted_label_name = evaluate_model('ECG_Model.h5', image)
+    # Upload image through Streamlit's file uploader
+    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-            # Store the evaluation results for display later
-            evaluation_results.append((uploaded_file.name, accuracy, predicted_label_name))
+    # Load your pre-trained model
+    model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
 
-    return evaluation_results
 
-# Your Streamlit code for setting up the UI and handling file upload
-with st.form("my-form", clear_on_submit=True):
-    uploaded_files = st.file_uploader("Choose an ECG file", accept_multiple_files=True, type=['png', 'dat', 'jpeg'])  
-    show_file = st.empty()
-    if not uploaded_files:
-        show_file.info("Please upload a file and submit.")
-    submitted = st.form_submit_button("UPLOAD")
+    if uploaded_file is not None:
+        # Resize the image to 100x100 pixels
+        resized_image = resize_image(uploaded_file, size=(100, 100))
 
-if submitted:
-    # Step 5: Pass the evaluation results to the "4_📋_Model_Evaluation.py" page
-    st.session_state.evaluation_results = process_uploaded_file(uploaded_files)
+        # Display the resized image
+        st.image(resized_image, caption="Uploaded Image", use_column_width=True)
+
+        # Preprocess the image (if needed)
+        processed_image = preprocess_image(uploaded_file)
+
+        # Show the "Evaluate" button only if the evaluation is not completed
+        if not st.session_state.evaluation_completed:
+            if st.button("Evaluate"):
+                # Make predictions using your model
+                st.write("Prediction model is still loading, please wait.")
+                predictions = model.predict(processed_image)
+
+                # Store the predictions in session state
+                st.session_state.predictions = predictions
+                st.session_state.evaluation_completed = True
+            else:
+                st.write("Please click the 'Evaluate' button to run the model.")
+
+    # Check if evaluation is completed and display the message
+    if st.session_state.evaluation_completed and st.session_state.predictions is not None:
+        st.write("### Evaluation Completed! Please go to 📋Model Evaluation to view results.")
+
+if __name__ == "__main__":
+    main()
