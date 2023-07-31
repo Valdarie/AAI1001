@@ -18,9 +18,6 @@ def preprocess_image(image):
 def main():
     st.header("Upload ECG")
 
-    # Load your pre-trained model
-    model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
-
     # Initialize session-specific state variables
     if "predictions" not in st.session_state:
         st.session_state.predictions = []
@@ -29,6 +26,9 @@ def main():
 
     # Upload image through Streamlit's file uploader
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+
+    # Load your pre-trained model
+    model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
 
     if uploaded_file is not None:
         # Display the uploaded image immediately

@@ -1,65 +1,87 @@
+#Pip install streamlit
 import streamlit as st
-import tensorflow as tf
-import numpy as np
-from PIL import Image
+import pandas as pd
 
 # st.set_page_config
-st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📋")
+st.set_page_config(page_title="AAI1001 | Dataframes", layout="wide", page_icon="📊")
 
-def preprocess_image(image):
-    img = Image.open(image).convert('RGB')
-    img = img.resize((224, 224))
-    img_array = np.array(img)
-    img_array = img_array / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
-    return img_array
+st.title("This is the Title")
+st.header("This is the header")
+st.write("Hello World from Streamlit using st.write")
 
-# Streamlit app code
-def main():
-    st.header("Model Evaluation")
+# Function to get data from CSV files and cache it
+@st.cache_data
+def get_data(x):
+    return pd.read_csv(x)
 
-    # Load your pre-trained model
-    model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
+# Define search_bar function
+def search_bar(df, col_name, ele):
+    if col_name in df.columns:
+        unique_identifier = df[col_name].unique()
+        select = st.selectbox(ele, unique_identifier)
+        return df[df[col_name] == select]
+    else:
+        st.write(f"Column '{col_name}' does not exist in the DataFrame.")
+        return df  # Returning the original DataFrame if the column doesn't exist
 
-    # Initialize session-specific state variables
-    if "predictions" not in st.session_state:
-        st.session_state.predictions = None
-    if "evaluation_completed" not in st.session_state:
-        st.session_state.evaluation_completed = False
-    if "uploaded_files" not in st.session_state:
-        st.session_state.uploaded_files = []
+# Load data from CSV Files
+scp_data = get_data('..\Jupyter\scp_statements.csv')
+ptbxl_data = get_data('..\Jupyter\ptbxl_database.csv')
 
-    # Check if evaluation is completed and display the message
-    if st.session_state.evaluation_completed and st.session_state.predictions is not None:
-        st.write("### Evaluation Completed! Here are the results:")
+# Display SCP Statements
+st.header('SCP Statements')
+with st.container():
+    # Text Input Search Bar [DOES NOT WORK YET] 
+    scp_input = st.text_input("Enter the column name for filtering:")
+    if not scp_input: #If no user input, show full data
+        st.write(scp_data) # use st.write to show data
 
-        # Display the evaluated image and prediction results for each uploaded image
-        for uploaded_file in st.session_state.uploaded_files:
-            # Display the evaluated image
-            st.image(uploaded_file, caption=uploaded_file.name, use_column_width=True)
+    if scp_input:
+        selected_df = search_bar(scp_data, scp_input, f"Selected {scp_input}")
+        # Display the filtered DataFrame
+        st.write("## Filtered SCP Data")
+        st.write(selected_df)
 
-            # Preprocess the image
-            processed_image = preprocess_image(uploaded_file)
 
-            # Make predictions using the model
-            predictions = model.predict(processed_image)
+# Display Ptbxl Database
+st.header('Ptbxl Database')
+with st.container():
+    ptbxl_input = st.text_input("Enter the column name for filtering: ")
+    ptbxl_id = st.text_input("Or search by Patient ID: ")
 
-            # Display the results in a table format
-            class_indices = {
-                0: 'Fusion (Ventricular & Normal Beat)',
-                1: 'Myocardial Infarction',
-                2: 'Normal',
-                3: 'Unclassifiable',
-                4: 'Supraventricular Premature',
-                5: 'Premature Ventricular Contraction'
-            }
-            # Map the numerical indices to class labels for display
-            class_labels = [class_indices[i] for i in range(len(class_indices))]
-            prediction_table = {
-                'Class Label': class_labels,
-                'Probability': [f"{probability:.2f}" for probability in predictions[0]]
-            }
-            st.table(prediction_table)
+    if not ptbxl_input and not ptbxl_id: #If no user input, show full data
+        st.write(ptbxl_data)
 
-if __name__ == "__main__":
-    main()
+    if ptbxl_input:
+        selected_df = search_bar(ptbxl_data, ptbxl_input, f"Selected {ptbxl_input}")
+        # Display the filtered DataFrame
+        st.write("## Filtered ptbxl data")
+        st.write(selected_df)
+
+    if ptbxl_id and not ptbxl_input:
+        ptbxl_id = ptbxl_id.strip() # Remove any leading / trailing spaces from user input
+        
+        # Display the unique patient IDs before removing commas
+        #st.write("Unique Patient IDs (Before Removing Commas):")
+        #st.write(ptbxl_data['patient_id'].unique())
+
+        # Convert the patient_id column to strings and remove commas
+        #ptbxl_data['patient_id'] = ptbxl_data['patient_id'].astype(str).str.replace(',', '').str.strip()
+
+        # Convert the patient_id column to integers where possible
+        ptbxl_data['patient_id'] = pd.to_numeric(ptbxl_data['patient_id'], errors='coerce')
+
+        # Display the unique patient IDs after removing commas and converting to integers
+        #st.write("Unique Patient IDs (After Removing Commas and Converting to Integers):")
+        #st.write(ptbxl_data['patient_id'].unique())
+
+        selected_df = ptbxl_data[ptbxl_data['patient_id'] == int(ptbxl_id)]
+        try:
+            if not selected_df.empty:
+                # Display the filtered DataFrame
+                st.write(f"## Patient {ptbxl_id}'s data")
+                st.write(selected_df)
+            else:
+                st.write(f"No data found for Patient ID: {ptbxl_id}")
+        except ValueError:
+            st.write(f"Please key in an integer")

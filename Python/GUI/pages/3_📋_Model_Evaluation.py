@@ -33,18 +33,7 @@ def main():
 
         # Display the evaluated image and prediction results for each uploaded image
         for uploaded_file, predictions in st.session_state.predictions:
-            # Display the evaluated image
-            st.image(uploaded_file, caption=uploaded_file.name, use_column_width=True)
-
-            # Preprocess the image
-            processed_image = preprocess_image(uploaded_file)
-
-            # Make predictions using the model
-            # The predictions variable now contains the predictions stored in the session state
-            # We don't need to make predictions again as it's already done in 2_📤_Images.py
-            # predictions = model.predict(processed_image)
-
-            # Display the results in a table format
+            # Find the class label with the highest probability
             class_indices = {
                 0: 'Fusion (Ventricular & Normal Beat)',
                 1: 'Myocardial Infarction',
@@ -53,13 +42,31 @@ def main():
                 4: 'Supraventricular Premature',
                 5: 'Premature Ventricular Contraction'
             }
-            # Map the numerical indices to class labels for display
+            # Get the index of the class with the highest probability
+            highest_probability_index = np.argmax(predictions[0])
+            # Get the class label with the highest probability
+            predicted_class = class_indices[highest_probability_index]
+
+            # Center-aligned filename and left-aligned prediction
+            st.markdown(f"""<div style='text-align: center'><h3>Filename: {uploaded_file.name}</h3></div>
+                <div style='text-align: center;'><h3>Prediction: {predicted_class}</h3></div>""", unsafe_allow_html=True)
+            st.image(uploaded_file, use_column_width=True)
+
+            # Preprocess the image
+            processed_image = preprocess_image(uploaded_file)
+
+            # Display the results in a table format
             class_labels = [class_indices[i] for i in range(len(class_indices))]
             prediction_table = {
                 'Class Label': class_labels,
                 'Probability': [f"{probability:.2f}" for probability in predictions[0]]
             }
             st.table(prediction_table)
+
+        # Hide the message "Please upload ECG image in 📤Images.py." if any image has been evaluated
+        st.write("")
+    else:
+        st.write("Please upload ECG image in 📤Images.py.")
 
 if __name__ == "__main__":
     main()
