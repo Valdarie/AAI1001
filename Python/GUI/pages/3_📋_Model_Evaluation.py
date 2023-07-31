@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-# Set page configuration
+# st.set_page_config
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📋")
 
 def preprocess_image(image):
@@ -50,7 +50,7 @@ def main():
             # Center-aligned filename and left-aligned prediction
             st.markdown(f"""<div style='text-align: center'><h4>Filename: {uploaded_file.name}</h4></div>
                 <div style='text-align: center;'><h4>Prediction: {predicted_class}</h4></div>""", unsafe_allow_html=True)
-            st.image(uploaded_file, use_column_width=True, caption="Uploaded Image")
+            st.image(uploaded_file, width=224)
 
             # Preprocess the image
             processed_image = preprocess_image(uploaded_file)
@@ -63,10 +63,10 @@ def main():
             }
             st.table(prediction_table)
 
-        # Hide the message "Please upload ECG image in 📤Images.py." if any image has been evaluated
+        # Hide the message "Please upload ECG image in 📤Images." if any image has been evaluated
         st.write("")
     else:
-        st.write("Please upload ECG image in 📤Images.py.")
+        st.write("Please upload ECG image in 📤Images.")
 
 if __name__ == "__main__":
     main()
