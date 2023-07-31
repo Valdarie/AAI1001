@@ -3,9 +3,6 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-# Set page configuration
-#st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📊")
-
 def preprocess_image(image):
     img = Image.open(image).convert('RGB')
     img = img.resize((224, 224))
@@ -14,7 +11,6 @@ def preprocess_image(image):
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
 
-# Streamlit app code
 def main():
     st.header("Model Results")
 
@@ -50,6 +46,7 @@ def main():
             st.markdown(f"""<div style='text-align: left'><h4>Filename: {uploaded_file.name}</h4></div>
                 <div style='text-align: left;'><h4>Prediction: {predicted_class}</h4></div>""", unsafe_allow_html=True)
             st.image(uploaded_file, width=224)
+
             # Display the results in a table format
             prediction_table = {
                 'Class Label': [class_indices[i] for i in range(len(class_indices))],

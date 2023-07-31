@@ -1,9 +1,7 @@
 import streamlit as st
 
-# st.set_page_config
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="💯")
 
-# Center-align the button in the sidebar
 if "show_additional_pages" not in st.session_state:
     st.session_state.show_additional_pages = False
 
@@ -33,21 +31,18 @@ with st.container():
         """
     )
 
-# Show the content of Model_Evaluation.py and Dataframe.py when "For Devs" button is clicked
+# Show the content of 2_Normal_Evaluation.py and 3_Dataframe.py when "For Devs" button is clicked
 if st.session_state.show_additional_pages:
     st.sidebar.header("Additional Pages")
 
-    # Load and execute the content of Normal_Evaluation.py
+    # Load and execute the content of 2_Normal_Evaluation.py
     if st.sidebar.button("Normal Evaluation"):
         with open("devs/2_Normal_Evaluation.py", "r") as file:
             code = file.read()
         exec(code)
 
-
-    # Load and execute the content of Dataframe.py
+    # Load and execute the content of 3_Dataframe.py
     if st.sidebar.button("Dataframe"):
         with open("devs/3_Dataframe.py", "r") as file:
             code = file.read()
         exec(code)
-
-    
