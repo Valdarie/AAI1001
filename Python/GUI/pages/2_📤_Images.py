@@ -27,7 +27,7 @@ def main():
     # Upload image through Streamlit's file uploader
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-    # Load your pre-trained model
+    # Load your pre-trained model (used for evaluation in 3_📋_Model_Evaluation.py)
     model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
 
     if uploaded_file is not None:
@@ -37,7 +37,7 @@ def main():
         # Show the "Evaluate" button only if the evaluation is not completed
         if not st.session_state.evaluation_completed:
             if st.button("Evaluate"):
-                # Make predictions using your model
+                # Make predictions using the model
                 st.write("Prediction model is still loading, please wait.")
                 processed_image = preprocess_image(uploaded_file)
                 predictions = model.predict(processed_image)

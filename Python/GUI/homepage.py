@@ -1,19 +1,15 @@
 import streamlit as st
 import pandas as pd
 
-# Set page configuration
+# st.set_page_config
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="💯")
 
-# Toggle additional pages in the sidebar
+# Center-align the button in the sidebar
 if "show_additional_pages" not in st.session_state:
     st.session_state.show_additional_pages = False
 
 if st.sidebar.button("For Devs"):
     st.session_state.show_additional_pages = not st.session_state.show_additional_pages
-
-if st.session_state.show_additional_pages:
-    st.sidebar.header("Additional Pages")
-    st.sidebar.write("You can add more pages here!")
 
 st.title("AAI1001")
 st.header("Data Engineering and Visualisations Project")
