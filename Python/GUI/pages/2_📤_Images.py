@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-# st.set_page_config
+# Set page configuration
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📤")
 
 def preprocess_image(image):
