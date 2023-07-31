@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 
 # Set page configuration
-st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📊")
+#st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📊")
 
 def preprocess_image(image):
     img = Image.open(image).convert('RGB')
@@ -23,7 +23,7 @@ def main():
 
     # Check if there are any saved predictions and images from 2_Images.py
     if "predictions" in st.session_state and st.session_state.predictions:
-        st.write("### Evaluation Completed! Here are the results:")
+        st.markdown(f"<div style='text-align: center'><h3>Evaluation Completed! Here are the results: </h3></div>",unsafe_allow_html=True)
 
         # Display the evaluated image and prediction results for each uploaded image
         for uploaded_file, predictions in st.session_state.predictions:
@@ -47,10 +47,9 @@ def main():
             predicted_class = class_indices[np.argmax(predictions[0])]
 
             # Center-aligned filename and left-aligned prediction
-            st.markdown(f"""<div style='text-align: center'><h4>Filename: {uploaded_file.name}</h4></div>
-                <div style='text-align: center;'><h4>Prediction: {predicted_class}</h4></div>""", unsafe_allow_html=True)
+            st.markdown(f"""<div style='text-align: left'><h4>Filename: {uploaded_file.name}</h4></div>
+                <div style='text-align: left;'><h4>Prediction: {predicted_class}</h4></div>""", unsafe_allow_html=True)
             st.image(uploaded_file, width=224)
-
             # Display the results in a table format
             prediction_table = {
                 'Class Label': [class_indices[i] for i in range(len(class_indices))],

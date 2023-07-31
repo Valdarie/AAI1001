@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 
 # st.set_page_config
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="💯")
@@ -33,3 +32,22 @@ with st.container():
         objective assessments, and efficient usage of resources in diagnosing heart disease.
         """
     )
+
+# Show the content of Model_Evaluation.py and Dataframe.py when "For Devs" button is clicked
+if st.session_state.show_additional_pages:
+    st.sidebar.header("Additional Pages")
+
+    # Load and execute the content of Normal_Evaluation.py
+    if st.sidebar.button("Normal Evaluation"):
+        with open("devs/2_Normal_Evaluation.py", "r") as file:
+            code = file.read()
+        exec(code)
+
+
+    # Load and execute the content of Dataframe.py
+    if st.sidebar.button("Dataframe"):
+        with open("devs/3_Dataframe.py", "r") as file:
+            code = file.read()
+        exec(code)
+
+    

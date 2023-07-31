@@ -25,7 +25,7 @@ def main():
 
     # Check if evaluation is completed and display the message
     if st.session_state.evaluation_completed and st.session_state.predictions:
-        st.write("### Evaluation Completed! Here are the results:")
+        st.markdown(f"<div style='text-align: center'><h3>Evaluation Completed! Here are the results: </h3></div>",unsafe_allow_html=True)
 
         # Display the evaluated image and prediction results for each uploaded image
         for uploaded_file, predictions in st.session_state.predictions:
@@ -44,8 +44,8 @@ def main():
             predicted_class = class_indices[highest_probability_index]
 
             # Center-aligned filename and left-aligned prediction
-            st.markdown(f"""<div style='text-align: center'><h4>Filename: {uploaded_file.name}</h4></div>
-                <div style='text-align: center;'><h4>Prediction: {predicted_class}</h4></div>""", unsafe_allow_html=True)
+            st.markdown(f"""<div style='text-align: left'><h4>Filename: {uploaded_file.name}</h4></div>
+                <div style='text-align: left;'><h4>Prediction: {predicted_class}</h4></div>""", unsafe_allow_html=True)
             st.image(uploaded_file, width=224)
 
             # Preprocess the image
