@@ -14,53 +14,46 @@ def preprocess_image(image):
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
 
-def resize_image(image, size=(100, 100)):
-    img = Image.open(image).convert('RGB')
-    img = img.resize(size)
-    return img
-
 # Streamlit app code
 def main():
     st.header("Upload ECG")
 
+    # Load your pre-trained model
+    model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
+
     # Initialize session-specific state variables
     if "predictions" not in st.session_state:
-        st.session_state.predictions = None
+        st.session_state.predictions = []
     if "evaluation_completed" not in st.session_state:
         st.session_state.evaluation_completed = False
 
     # Upload image through Streamlit's file uploader
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-    # Load your pre-trained model
-    model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
-
-
     if uploaded_file is not None:
-        # Resize the image to 100x100 pixels
-        resized_image = resize_image(uploaded_file, size=(100, 100))
-
-        # Display the resized image
-        st.image(resized_image, caption="Uploaded Image", use_column_width=True)
-
-        # Preprocess the image (if needed)
-        processed_image = preprocess_image(uploaded_file)
+        # Display the uploaded image immediately
+        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
 
         # Show the "Evaluate" button only if the evaluation is not completed
         if not st.session_state.evaluation_completed:
             if st.button("Evaluate"):
                 # Make predictions using your model
-                st.write("Prediction model is still loading, please wait.")
+                message_placeholder = st.empty()  # Create an empty placeholder for the message
+                message_placeholder.write("Prediction model is still loading, please wait.")
+                processed_image = preprocess_image(uploaded_file)
                 predictions = model.predict(processed_image)
 
-                # Store the predictions in session state
-                st.session_state.predictions = predictions
+                # Store the predictions and uploaded file in session state
+                st.session_state.predictions.append((uploaded_file, predictions))
                 st.session_state.evaluation_completed = True
+
             else:
-                st.write("Please click the 'Evaluate' button to run the model.")
+                st.write("Please press the 'Evaluate' button to run the model.")
+        else:
+            st.write("Prediction model is still loading, please wait.")
 
     # Check if evaluation is completed and display the message
-    if st.session_state.evaluation_completed and st.session_state.predictions is not None:
+    if st.session_state.evaluation_completed and st.session_state.predictions:
         st.write("### Evaluation Completed! Please go to 📋Model Evaluation to view results.")
 
 if __name__ == "__main__":
