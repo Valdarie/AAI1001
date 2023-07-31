@@ -32,7 +32,7 @@ def main():
 
     if uploaded_file is not None:
         # Display the uploaded image immediately
-        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+        st.image(uploaded_file, caption="Uploaded Image", width=224)
 
         # Show the "Evaluate" button only if the evaluation is not completed
         if not st.session_state.evaluation_completed:
