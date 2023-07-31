@@ -38,19 +38,13 @@ def main():
         if not st.session_state.evaluation_completed:
             if st.button("Evaluate"):
                 # Make predictions using your model
-                message_placeholder = st.empty()  # Create an empty placeholder for the message
-                message_placeholder.write("Prediction model is still loading, please wait.")
+                st.write("Prediction model is still loading, please wait.")
                 processed_image = preprocess_image(uploaded_file)
                 predictions = model.predict(processed_image)
 
                 # Store the predictions and uploaded file in session state
                 st.session_state.predictions.append((uploaded_file, predictions))
                 st.session_state.evaluation_completed = True
-
-            else:
-                st.write("Please press the 'Evaluate' button to run the model.")
-        else:
-            st.write("Prediction model is still loading, please wait.")
 
     # Check if evaluation is completed and display the message
     if st.session_state.evaluation_completed and st.session_state.predictions:

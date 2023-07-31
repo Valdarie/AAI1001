@@ -48,8 +48,8 @@ def main():
             predicted_class = class_indices[highest_probability_index]
 
             # Center-aligned filename and left-aligned prediction
-            st.markdown(f"""<div style='text-align: center'><h3>Filename: {uploaded_file.name}</h3></div>
-                <div style='text-align: center;'><h3>Prediction: {predicted_class}</h3></div>""", unsafe_allow_html=True)
+            st.markdown(f"""<div style='text-align: center'><h4>Filename: {uploaded_file.name}</h4></div>
+                <div style='text-align: center;'><h4>Prediction: {predicted_class}</h4></div>""", unsafe_allow_html=True)
             st.image(uploaded_file, use_column_width=True)
 
             # Preprocess the image
