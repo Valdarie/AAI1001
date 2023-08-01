@@ -23,7 +23,7 @@ def main():
 
     # Check if there are any saved predictions and images from 2_Images.py
     if "predictions" in st.session_state and st.session_state.predictions:
-        st.markdown(f"<div style='text-align: center'><h3>Evaluation Completed! Here are the results: </h3></div>",
+        st.markdown(f"<div style='text-align: left'><h3>Evaluation Completed! Here are the results: </h3></div>",
                     unsafe_allow_html=True)
 
         # Display the evaluated image and prediction results for each uploaded image
