@@ -41,8 +41,6 @@ if st.session_state.show_additional_pages:
             code = file.read()
         exec(code)
 
-    # Load and execute the content of Dataframe.py
-    if st.sidebar.button("Dataframe"):
-        with open("devs/3_Dataframe.py", "r") as file:
-            code = file.read()
-        exec(code)
+    # Display Dataframe page using an iframe
+    #if st.sidebar.button("Dataframe"):
+    #    st.sidebar.markdown('<iframe src="3_Dataframe.py" width=800 height=600></iframe>', unsafe_allow_html=True)
