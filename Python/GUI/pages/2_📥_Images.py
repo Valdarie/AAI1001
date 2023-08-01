@@ -2,6 +2,7 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import os
 
 # Set page configuration
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📥")
@@ -28,7 +29,8 @@ def main():
     uploaded_files = st.file_uploader("Choose ECG images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
     # Load your pre-trained model (used for evaluation in 3_📋_Model_Evaluation.py)
-    model = tf.keras.models.load_model('./ECG_Model_Augmentation.h5')
+    model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ECG_Model_Augmentation.h5")
+    model = tf.keras.models.load_model(model_path)
 
     if uploaded_files is not None:
         # Display the uploaded images in rows with a maximum of 3 images per row
