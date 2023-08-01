@@ -17,7 +17,7 @@ def preprocess_image(image):
 def main():
     st.header("Model Evaluation")
 
-    # Initialize session-specific state variables (used for storing predictions from 2_📥_Images.py)
+    # Initialize session-specific state variables (used for storing predictions from 2_Images.py)
     if "predictions" not in st.session_state:
         st.session_state.predictions = []
     if "evaluation_completed" not in st.session_state:

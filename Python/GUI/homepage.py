@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 
-# st.set_page_config
+# Set page configuration
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="💯")
 
 # Center-align the button in the sidebar
@@ -32,13 +32,13 @@ st.markdown(
     """
 )
 
-# Show the content of Model_Evaluation.py and Dataframe.py when "For Devs" button is clicked
+# Show the content of 2_Normal_Evaluation.py and 3_Dataframe.py when "For Devs" button is clicked
 if st.session_state.show_additional_pages:
     st.sidebar.header("Additional Pages")
 
-    # Load and execute the content of Normal_Evaluation.py
-    normal_evaluation_path = os.path.join(os.getcwd(), "devs", "2_Normal_Evaluation.py")
-    if st.sidebar.button("Normal Evaluation"):
-        with open(normal_evaluation_path, "r") as file:
-            code = file.read()
-        exec(code)
+    # Load and execute the content of 2_Normal_Evaluation.py
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    normal_evaluation_path = os.path.join(current_dir, "devs", "2_Normal_Evaluation.py")
+    with open(normal_evaluation_path, "r") as file:
+        code = file.read()
+    exec(code)
