@@ -1,46 +1,66 @@
 import streamlit as st
+import pandas as pd
 
-# st.set_page_config
-st.set_page_config(page_title="AAI1001", layout="wide", page_icon="💯")
+# Function to get data from CSV files without caching
+def get_data(x):
+    return pd.read_csv(x)
 
-# Center-align the button in the sidebar
-if "show_additional_pages" not in st.session_state:
-    st.session_state.show_additional_pages = False
+# Define search_bar function (unchanged)
+def search_bar(df, col_name, ele):
+    if col_name in df.columns:
+        unique_identifier = df[col_name].unique()
+        select = st.selectbox(ele, unique_identifier)
+        return df[df[col_name] == select]
+    else:
+        st.write(f"Column '{col_name}' does not exist in the DataFrame.")
+        return df  # Returning the original DataFrame if the column doesn't exist
 
-if st.sidebar.button("For Devs"):
-    st.session_state.show_additional_pages = not st.session_state.show_additional_pages
+# Load data from CSV Files
+scp_data = get_data('..\Jupyter\scp_statements.csv')
+ptbxl_data = get_data('..\Jupyter\ptbxl_database.csv')
 
-st.title("AAI1001 Data Engineering and Visualization Project")
-st.header("Cardiovascular Diseases Prediction via Electrocardiogram")
+# Display SCP Statements
+st.header('SCP Statements')
 
-st.markdown(
-    """
-    Done by:\n
-    👧 ASHLINDER KAUR DO S. AJAIB SINGH [2202636]\n
-    👧 LEO EN QI VALERIE                [2202795]\n
-    👧 TEO XUANTING                     [2202217]
-    """
-)
+# Text Input Search Bar [DOES NOT WORK YET]
+scp_input = st.text_input("Enter the column name for filtering:")
+if scp_input:
+    selected_df = search_bar(scp_data, scp_input, f"Selected {scp_input}")
+    # Display the filtered DataFrame
+    st.write("## Filtered SCP Data")
+    st.write(selected_df)
+else:
+    # If no user input, show full data
+    st.write(scp_data)  # use st.write to show data
 
-st.markdown(
-    """
-    This project aims to design a minimal viable product (MVP) 
-    of a trained Machine Learning (ML) model with a Graphical User Interface (GUI) 
-    to predict heart disease. It addresses the need for accurate detection, 
-    objective assessments, and efficient usage of resources in diagnosing heart disease.
-    """
-)
+# Display Ptbxl Database
+st.header('Ptbxl Database')
+ptbxl_input = st.text_input("Enter the column name for filtering: ")
+ptbxl_id = st.text_input("Or search by Patient ID: ")
 
-# Show the content of Model_Evaluation.py and Dataframe.py when "For Devs" button is clicked
-if st.session_state.show_additional_pages:
-    st.sidebar.header("Additional Pages")
+if ptbxl_input:
+    selected_df = search_bar(ptbxl_data, ptbxl_input, f"Selected {ptbxl_input}")
+    # Display the filtered DataFrame
+    st.write("## Filtered ptbxl data")
+    st.write(selected_df)
 
-    # Load and execute the content of Normal_Evaluation.py
-    if st.sidebar.button("Normal Evaluation"):
-        with open("devs/2_Normal_Evaluation.py", "r") as file:
-            code = file.read()
-        exec(code)
+if ptbxl_id:
+    ptbxl_id = ptbxl_id.strip()  # Remove any leading / trailing spaces from user input
 
-    # Display Dataframe page using an iframe
-    if st.sidebar.button("Dataframe"):
-        st.sidebar.markdown('<iframe src="3_Dataframe.py" width=800 height=600></iframe>', unsafe_allow_html=True)
+    # Convert the patient_id column to integers where possible
+    ptbxl_data['patient_id'] = pd.to_numeric(ptbxl_data['patient_id'], errors='coerce')
+
+    selected_df = ptbxl_data[ptbxl_data['patient_id'] == int(ptbxl_id)]
+    try:
+        if not selected_df.empty:
+            # Display the filtered DataFrame
+            st.write(f"## Patient {ptbxl_id}'s data")
+            st.write(selected_df)
+        else:
+            st.write(f"No data found for Patient ID: {ptbxl_id}")
+    except ValueError:
+        st.write(f"Please key in an integer")
+
+if not ptbxl_input and not ptbxl_id:
+    # If no user input, show full data
+    st.write(ptbxl_data)
