@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 # st.set_page_config
 st.set_page_config(page_title="AAI1001", layout="wide", page_icon="💯")
@@ -36,11 +37,8 @@ if st.session_state.show_additional_pages:
     st.sidebar.header("Additional Pages")
 
     # Load and execute the content of Normal_Evaluation.py
+    normal_evaluation_path = os.path.join(os.getcwd(), "devs", "2_Normal_Evaluation.py")
     if st.sidebar.button("Normal Evaluation"):
-        with open("devs/2_Normal_Evaluation.py", "r") as file:
+        with open(normal_evaluation_path, "r") as file:
             code = file.read()
         exec(code)
-
-    # Display Dataframe page using an iframe
-    #if st.sidebar.button("Dataframe"):
-    #    st.sidebar.markdown('<iframe src="3_Dataframe.py" width=800 height=600></iframe>', unsafe_allow_html=True)

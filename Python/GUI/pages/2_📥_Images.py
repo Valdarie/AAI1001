@@ -29,7 +29,7 @@ def main():
     uploaded_files = st.file_uploader("Choose ECG images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
     # Load your pre-trained model (used for evaluation in 3_📋_Model_Evaluation.py)
-    model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ECG_Model_Augmentation.h5")
+    model_path = os.path.join(os.getcwd(), "ECG_Model_Augmentation.h5")
     model = tf.keras.models.load_model(model_path)
 
     if uploaded_files is not None:
