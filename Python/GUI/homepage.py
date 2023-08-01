@@ -34,7 +34,7 @@ st.markdown(
 
 # Show the content of 2_Normal_Evaluation.py and 3_Dataframe.py when "For Devs" button is clicked
 if st.session_state.show_additional_pages:
-    st.sidebar.header("Additional Pages")
+    st.sidebar.header("Normal Evaluation")
 
     # Load and execute the content of 2_Normal_Evaluation.py
     current_dir = os.path.dirname(os.path.abspath(__file__))

@@ -15,7 +15,7 @@ def preprocess_image(image):
 
 # Streamlit app code
 def main():
-    st.header("Model Evaluation")
+    st.header("Normal Model Evaluation")
 
     # Initialize session-specific state variables (used for storing predictions from 2_📥_Images.py)
     if "predictions" not in st.session_state:
