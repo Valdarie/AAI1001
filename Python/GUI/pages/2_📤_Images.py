@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 
 # Set page configuration
-st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📤")
+st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📥")
 
 def preprocess_image(image):
     img = Image.open(image).convert('RGB')
@@ -48,7 +48,8 @@ def main():
 
     # Check if evaluation is completed and display the message
     if st.session_state.evaluation_completed and st.session_state.predictions:
-        st.write("### Evaluation Completed! Please go to 📋Model Evaluation to view results.")
+        st.write("#### Evaluation Completed! Please go to", "<span style='color: red;'>📋Model Evaluation</span>", 
+                 "to view results.", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()

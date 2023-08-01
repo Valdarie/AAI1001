@@ -23,7 +23,8 @@ def main():
 
     # Check if there are any saved predictions and images from 2_Images.py
     if "predictions" in st.session_state and st.session_state.predictions:
-        st.markdown(f"<div style='text-align: center'><h3>Evaluation Completed! Here are the results: </h3></div>",unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center'><h3>Evaluation Completed! Here are the results: </h3></div>",
+                    unsafe_allow_html=True)
 
         # Display the evaluated image and prediction results for each uploaded image
         for uploaded_file, predictions in st.session_state.predictions:
@@ -55,12 +56,13 @@ def main():
                 'Class Label': [class_indices[i] for i in range(len(class_indices))],
                 'Probability': [f"{probability:.2f}" for probability in predictions[0]]
             }
-            st.table(prediction_table)
+            st.dataframe(prediction_table)
 
         # Hide the message "Please upload ECG image in 2_Images.py." if any image has been evaluated
         st.write("")
     else:
-        st.write("Please upload ECG image in 2_Images.py.")
+        st.write("#### Please upload ECG image in", "<span style='color: red;'>:inbox_tray: Images</span>",
+                 unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()

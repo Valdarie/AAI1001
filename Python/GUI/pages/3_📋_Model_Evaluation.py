@@ -17,7 +17,7 @@ def preprocess_image(image):
 def main():
     st.header("Model Evaluation")
 
-    # Initialize session-specific state variables (used for storing predictions from 2_📤_Images.py)
+    # Initialize session-specific state variables (used for storing predictions from 2_📥_Images.py)
     if "predictions" not in st.session_state:
         st.session_state.predictions = []
     if "evaluation_completed" not in st.session_state:
@@ -25,7 +25,8 @@ def main():
 
     # Check if evaluation is completed and display the message
     if st.session_state.evaluation_completed and st.session_state.predictions:
-        st.markdown(f"<div style='text-align: center'><h3>Evaluation Completed! Here are the results: </h3></div>",unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align: center'><h3>Evaluation Completed! Here are the results: </h3></div>",
+                    unsafe_allow_html=True)
 
         # Display the evaluated image and prediction results for each uploaded image
         for uploaded_file, predictions in st.session_state.predictions:
@@ -56,12 +57,13 @@ def main():
                 'Class Label': [class_indices[i] for i in range(len(class_indices))],
                 'Probability': [f"{probability:.2f}" for probability in predictions[0]]
             }
-            st.table(prediction_table)
+            st.dataframe(prediction_table)
 
         # Hide the message "Please upload ECG image in 2_Images.py." if any image has been evaluated
         st.write("")
     else:
-        st.write("Please upload ECG image in 2_Images.py.")
+        st.write("#### Please upload ECG image in", "<span style='color: red;'>📥Images</span>.",
+                 unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()

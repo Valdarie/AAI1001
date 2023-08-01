@@ -11,16 +11,15 @@ if st.sidebar.button("For Devs"):
     st.session_state.show_additional_pages = not st.session_state.show_additional_pages
 
 st.title("AAI1001")
-st.header("Data Engineering and Visualisations Project")
-st.write("Hello World from Streamlit using st.write")
+st.header("Data Engineering and Visualisation Project")
 
 with st.container():
     st.markdown(
         """
-        Done by: 
-        - ASHLINDER KAUR DO S. AJAIB SINGH      [2202636]
-        - LEO EN QI VALERIE                     [2202795]
-        - TEO XUANTING                          [2202217]
+        Done by:\n
+        👧 ASHLINDER KAUR DO S. AJAIB SINGH [2202636]\n
+        👧 LEO EN QI VALERIE                [2202795]\n
+        👧 TEO XUANTING                     [2202217]
         """
     )
 
