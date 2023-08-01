@@ -10,8 +10,8 @@ if "show_additional_pages" not in st.session_state:
 if st.sidebar.button("For Devs"):
     st.session_state.show_additional_pages = not st.session_state.show_additional_pages
 
-st.title("AAI1001")
-st.header("Data Engineering and Visualization Project")
+st.title("AAI1001 Data Engineering and Visualization Project")
+st.header("Cardiovascular Diseases Prediction via Electrocardiogram")
 
 st.markdown(
     """
