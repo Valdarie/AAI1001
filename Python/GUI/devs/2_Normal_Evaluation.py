@@ -19,7 +19,7 @@ def main():
     st.header("Model Results")
 
     # Load your pre-trained model
-    model = tf.keras.models.load_model('../ECG_Model.h5')
+    model = tf.keras.models.load_model('./ECG_Model.h5')
 
     # Check if there are any saved predictions and images from 2_Images.py
     if "predictions" in st.session_state and st.session_state.predictions:

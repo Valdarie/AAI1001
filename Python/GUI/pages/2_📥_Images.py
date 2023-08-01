@@ -28,7 +28,7 @@ def main():
     uploaded_files = st.file_uploader("Choose ECG images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
     # Load your pre-trained model (used for evaluation in 3_📋_Model_Evaluation.py)
-    model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
+    model = tf.keras.models.load_model('./ECG_Model_Augmentation.h5')
 
     if uploaded_files is not None:
         # Display the uploaded images in rows with a maximum of 3 images per row
