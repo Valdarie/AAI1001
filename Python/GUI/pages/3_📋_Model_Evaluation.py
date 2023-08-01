@@ -68,7 +68,7 @@ def main():
         # Hide the message "Please upload ECG image in 2_Images.py." if any image has been evaluated
         st.write("")
     else:
-        st.write("#### Please upload ECG image in", "<span style='color: red;'>📤Images</span>.",
+        st.write("#### Please upload ECG image in", "<span style='color: red;'>📥Images</span>.",
                  unsafe_allow_html=True)
 
 if __name__ == "__main__":
