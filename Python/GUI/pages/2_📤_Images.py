@@ -25,25 +25,33 @@ def main():
         st.session_state.evaluation_completed = False
 
     # Upload image through Streamlit's file uploader
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+    uploaded_files = st.file_uploader("Choose ECG images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
     # Load your pre-trained model (used for evaluation in 3_📋_Model_Evaluation.py)
     model = tf.keras.models.load_model('../ECG_Model_Augmentation.h5')
 
-    if uploaded_file is not None:
-        # Display the uploaded image immediately
-        st.image(uploaded_file, caption="Uploaded Image", width=224)
+    if uploaded_files is not None:
+        # Display the uploaded images in rows with a maximum of 3 images per row
+        num_images = len(uploaded_files)
+        num_cols = 3  # Maximum of 3 images per row
+        num_rows = (num_images + num_cols - 1) // num_cols
+
+        for row in range(num_rows):
+            cols = st.columns(num_cols)
+            for col_idx, uploaded_file in enumerate(uploaded_files[row * num_cols: (row + 1) * num_cols]):
+                if uploaded_file:
+                    cols[col_idx].image(uploaded_file, caption=f"Uploaded Image: {uploaded_file.name}", width=224)
 
         # Show the "Evaluate" button only if the evaluation is not completed
         if not st.session_state.evaluation_completed:
-            if st.button("Evaluate"):
-                # Make predictions using the model
+            if st.button("Evaluate All"):
+                # Make predictions for all images using the model
                 st.write("Prediction model is still loading, please wait.")
-                processed_image = preprocess_image(uploaded_file)
-                predictions = model.predict(processed_image)
+                for uploaded_file in uploaded_files:
+                    processed_image = preprocess_image(uploaded_file)
+                    predictions = model.predict(processed_image)
+                    st.session_state.predictions.append((uploaded_file, predictions))
 
-                # Store the predictions and uploaded file in session state
-                st.session_state.predictions.append((uploaded_file, predictions))
                 st.session_state.evaluation_completed = True
 
     # Check if evaluation is completed and display the message
