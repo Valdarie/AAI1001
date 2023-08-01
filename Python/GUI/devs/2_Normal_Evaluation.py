@@ -2,6 +2,7 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import os
 
 # Set page configuration
 #st.set_page_config(page_title="AAI1001", layout="wide", page_icon="📊")
@@ -19,7 +20,8 @@ def main():
     st.header("Model Results")
 
     # Load your pre-trained model
-    model = tf.keras.models.load_model('./ECG_Model.h5')
+    model_path = os.path.join(os.path.dirname(__file__), "ECG_Model.h5")
+    model = tf.keras.models.load_model(model_path)
 
     # Check if there are any saved predictions and images from 2_Images.py
     if "predictions" in st.session_state and st.session_state.predictions:
